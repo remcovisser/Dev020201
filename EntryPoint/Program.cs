@@ -10,7 +10,7 @@ namespace EntryPoint
   {
     static void CrashMe(int n)
     {
-      Console.Write("Going strong at level " + n + "\r                       ");
+      Console.Write("Going strong at level " + n + "\r");
      	CrashMe(n + 1);
     }
 
@@ -19,7 +19,8 @@ namespace EntryPoint
 	{
 		//CrashMe(0);
 		var fullscreen = false;
-		var level = "4";
+		Console.WriteLine("Which assignment shall run next? (1, 2, 3, 4, or q for quit)", "Choose assignment");
+		var level = Console.ReadLine();
 		if (level == "1")
 		{
 			var game = VirtualCity.RunAssignment1(SortSpecialBuildingsByDistance, fullscreen);
