@@ -8,16 +8,9 @@ namespace EntryPoint
 #if WINDOWS || LINUX
   public static class Program
   {
-    static void CrashMe(int n)
-    {
-      Console.Write("Going strong at level " + n + "\r");
-     	CrashMe(n + 1);
-    }
-
     [STAThread]
      static void Main()
 	{
-		//CrashMe(0);
 		var fullscreen = false;
 		Console.WriteLine("Which assignment shall run next? (1, 2, 3, 4, or q for quit)", "Choose assignment");
 		var level = Console.ReadLine();
@@ -45,8 +38,77 @@ namespace EntryPoint
 
     private static IEnumerable<Vector2> SortSpecialBuildingsByDistance(Vector2 house, IEnumerable<Vector2> specialBuildings)
     {
-      return specialBuildings.OrderBy(v => Vector2.Distance(v, house));
+      //return specialBuildings.OrderBy(v => Vector2.Distance(v, house));
+
+			// House -> Vector2
+			// SpecialBuildings -> List(50) of Vector2
+		
+
+			int[] numbers = { 8, 3, 2, 9, 7, 1, 5, 4 };
+			mergeSort(numbers, 0, numbers.Length - 1);
+
+			return specialBuildings.OrderBy(v => Vector2.Distance(v, house));
     }
+
+	static public void mergeSort(int[] numbers, int start, int end)
+	{
+		if (start < end)
+		{
+			int middle = (start + end) / 2;
+			mergeSort(numbers, start, middle);
+			mergeSort(numbers, (middle + 1), end);
+
+			merge(numbers, start, (middle + 1), end);
+		}
+	}
+
+
+    static public void merge(int[] numbers, int start, int middle, int end)
+	{
+			int i;
+			for (i = 0; i < numbers.Length; i++)
+			{
+				if (numbers[start] > numbers[end])
+				{
+					int tempEnd = numbers[end];
+					numbers[end] = numbers[start];
+					numbers[start] = tempEnd;
+				}
+			}
+			// Output 38 29 17 45
+
+			/* 
+			 * Working implementation from internet
+			 * 
+				int[] temp = new int[numbers.Length];
+				int i, left_end, num_elements, tmp_pos;
+
+				left_end = (middle - 1);
+				tmp_pos = start;
+				num_elements = (end - start + 1);
+
+				while ((start <= left_end) && (middle <= end))
+				{
+					if (numbers[start] <= numbers[middle])
+						temp[tmp_pos++] = numbers[start++];
+					else
+						temp[tmp_pos++] = numbers[middle++];
+				}
+
+				while (start <= left_end)
+					temp[tmp_pos++] = numbers[start++];
+
+				while (middle <= end)
+					temp[tmp_pos++] = numbers[middle++];
+
+				for (i = 0; i < num_elements; i++)
+				{
+					numbers[end] = temp[end];
+					end--;
+				}
+		*/
+	}
+
 
     private static IEnumerable<IEnumerable<Vector2>> FindSpecialBuildingsWithinDistanceFromHouse(
       IEnumerable<Vector2> specialBuildings, 

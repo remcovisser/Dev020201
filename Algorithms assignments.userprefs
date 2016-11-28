@@ -1,20 +1,9 @@
 ﻿<Properties StartupConfiguration="{8FB4DEF4-B952-495D-A589-27CDA2A952D6}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="EntryPoint/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Main/Game.fs">
     <Files>
-      <File FileName="EntryPoint/Program.cs" Line="22" Column="17" />
-      <File FileName="Main/Game.fs" Line="30" Column="34" />
-      <File FileName="Main/MapGenerator.fs" Line="1" Column="1" />
+      <File FileName="EntryPoint/Program.cs" Line="13" Column="3" />
+      <File FileName="Main/Game.fs" Line="83" Column="24" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Algorithms assignments" expanded="True">
-            <Node name="EntryPoint" expanded="True" selected="True" />
-            <Node name="Game" expanded="True" />
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.EntryPoint PreferredExecutionTarget="MonoDevelop.Default" />
