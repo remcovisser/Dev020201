@@ -38,19 +38,28 @@ namespace EntryPoint
 
     private static IEnumerable<Vector2> SortSpecialBuildingsByDistance(Vector2 house, IEnumerable<Vector2> specialBuildings)
     {
-      //return specialBuildings.OrderBy(v => Vector2.Distance(v, house));
+			float[] specialBuildingsList = new float[specialBuildings.Count()];
+			int i = 0;
+			foreach (Vector2 building in specialBuildings)
+			{
+				specialBuildingsList[i] = calculateDistance(house, building);
+				i++;
+			}
 
-			// House -> Vector2
-			// SpecialBuildings -> List(50) of Vector2
-		
-
-			int[] numbers = { 8, 3, 2, 9, 7, 1, 5, 4 };
-			mergeSort(numbers, 0, numbers.Length - 1);
+			mergeSort(specialBuildingsList, 0, specialBuildings.Count() - 1);
 
 			return specialBuildings.OrderBy(v => Vector2.Distance(v, house));
     }
 
-	static public void mergeSort(int[] numbers, int start, int end)
+	private static float calculateDistance(Vector2 house, Vector2 specialBuilding)
+	{
+		float num1 = house.X - specialBuilding.X * 2;
+		float num2 = house.Y - specialBuilding.Y * 2;
+
+		return (float)Math.Sqrt(num1 + num2);
+	}
+
+	private static void mergeSort(float[] numbers, int start, int end)
 	{
 		if (start < end)
 		{
@@ -63,50 +72,39 @@ namespace EntryPoint
 	}
 
 
-    static public void merge(int[] numbers, int start, int middle, int end)
+    private static void merge(float[] numbers, int start, int middle, int end)
 	{
-			int i;
-			for (i = 0; i < numbers.Length; i++)
+		float[] tempList = new float[numbers.Length];
+		int leftEnd = (middle - 1);
+		int position = start;
+		int elements = (end - start + 1);
+
+		while ((start <= leftEnd) && (middle <= end))
+		{
+			if (numbers[start] <= numbers[middle])
 			{
-				if (numbers[start] > numbers[end])
-				{
-					int tempEnd = numbers[end];
-					numbers[end] = numbers[start];
-					numbers[start] = tempEnd;
-				}
+				tempList[position++] = numbers[start++];
+			} else {
+				tempList[position++] = numbers[middle++];
 			}
-			// Output 38 29 17 45
+		}
 
-			/* 
-			 * Working implementation from internet
-			 * 
-				int[] temp = new int[numbers.Length];
-				int i, left_end, num_elements, tmp_pos;
+		while (start <= leftEnd)
+		{
+			tempList[position++] = numbers[start++];
+		}
 
-				left_end = (middle - 1);
-				tmp_pos = start;
-				num_elements = (end - start + 1);
+		while (middle <= end)
+		{
+			tempList[position++] = numbers[middle++];
+		}
 
-				while ((start <= left_end) && (middle <= end))
-				{
-					if (numbers[start] <= numbers[middle])
-						temp[tmp_pos++] = numbers[start++];
-					else
-						temp[tmp_pos++] = numbers[middle++];
-				}
-
-				while (start <= left_end)
-					temp[tmp_pos++] = numbers[start++];
-
-				while (middle <= end)
-					temp[tmp_pos++] = numbers[middle++];
-
-				for (i = 0; i < num_elements; i++)
-				{
-					numbers[end] = temp[end];
-					end--;
-				}
-		*/
+		for (int i = 0; i < elements; i++)
+		{
+			numbers[end] = tempList[end];
+			end--;
+		}
+		
 	}
 
 
