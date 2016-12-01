@@ -38,28 +38,20 @@ namespace EntryPoint
 
     private static IEnumerable<Vector2> SortSpecialBuildingsByDistance(Vector2 house, IEnumerable<Vector2> specialBuildings)
     {
-			float[] specialBuildingsList = new float[specialBuildings.Count()];
-			int i = 0;
-			foreach (Vector2 building in specialBuildings)
-			{
-				specialBuildingsList[i] = calculateDistance(house, building);
-				i++;
-			}
+		double[] specialBuildingsList = new double[specialBuildings.Count()];
+		int i = 0;
+		foreach (Vector2 specialBuilding in specialBuildings)
+		{
+			specialBuildingsList[i] = Math.Sqrt((house.X - specialBuilding.X * 2) + (house.Y - specialBuilding.Y * 2));
+			i++;
+		}
 
-			mergeSort(specialBuildingsList, 0, specialBuildings.Count() - 1);
+		mergeSort(specialBuildingsList, 0, specialBuildings.Count() - 1);
 
-			return specialBuildings.OrderBy(v => Vector2.Distance(v, house));
+		return specialBuildings.OrderBy(v => Vector2.Distance(v, house));
     }
 
-	private static float calculateDistance(Vector2 house, Vector2 specialBuilding)
-	{
-		float num1 = house.X - specialBuilding.X * 2;
-		float num2 = house.Y - specialBuilding.Y * 2;
-
-		return (float)Math.Sqrt(num1 + num2);
-	}
-
-	private static void mergeSort(float[] numbers, int start, int end)
+	private static void mergeSort(double[] numbers, int start, int end)
 	{
 		if (start < end)
 		{
@@ -72,9 +64,9 @@ namespace EntryPoint
 	}
 
 
-    private static void merge(float[] numbers, int start, int middle, int end)
+    private static void merge(double[] numbers, int start, int middle, int end)
 	{
-		float[] tempList = new float[numbers.Length];
+		double[] tempList = new double[numbers.Length];
 		int leftEnd = (middle - 1);
 		int position = start;
 		int elements = (end - start + 1);
