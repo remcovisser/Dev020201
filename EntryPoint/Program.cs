@@ -42,7 +42,7 @@ namespace EntryPoint
 		int i = 0;
 		foreach (Vector2 specialBuilding in specialBuildings)
 		{
-			specialBuildingsList[i] = Math.Sqrt((house.X - specialBuilding.X * 2) + (house.Y - specialBuilding.Y * 2));
+			specialBuildingsList[i] = Math.Sqrt(Math.Pow((house.X - specialBuilding.X), 2) + Math.Pow((house.Y - specialBuilding.Y), 2));
 			i++;
 		}
 
@@ -104,12 +104,19 @@ namespace EntryPoint
       IEnumerable<Vector2> specialBuildings, 
       IEnumerable<Tuple<Vector2, float>> housesAndDistances)
     {
-      return
-          from h in housesAndDistances
-          select
-            from s in specialBuildings
-            where Vector2.Distance(h.Item1, s) <= h.Item2
-            select s;
+			Tree tree = new Tree(specialBuildings.First());
+			// Build the tree
+			foreach (var specialBuidling in specialBuildings.Skip(1))
+			{
+				tree.insert(specialBuidling);
+			}
+
+			// Filter out the specialBuildings that are not in the range of a house
+			foreach (Tuple<Vector2, float> houseAndDistance in housesAndDistances)
+			{
+				//yield return tree.getAllSpecialpointsInRangeOfHouse(houseAndDistance.Item1, houseAndDistance.Item2);
+				yield return tree.getAllSpecialpointsInRangeOfHouse(houseAndDistance.Item1, houseAndDistance.Item2);
+			}
     }
 
     private static IEnumerable<Tuple<Vector2, Vector2>> FindRoute(Vector2 startingBuilding, 
