@@ -114,23 +114,19 @@ namespace EntryPoint
 			// Filter out the specialBuildings that are not in the range of a house
 			foreach (Tuple<Vector2, float> houseAndDistance in housesAndDistances)
 			{
-				//yield return tree.getAllSpecialpointsInRangeOfHouse(houseAndDistance.Item1, houseAndDistance.Item2);
 				yield return tree.getAllSpecialpointsInRangeOfHouse(houseAndDistance.Item1, houseAndDistance.Item2);
 			}
     }
+	
 
-    private static IEnumerable<Tuple<Vector2, Vector2>> FindRoute(Vector2 startingBuilding, 
+
+
+
+		private static IEnumerable<Tuple<Vector2, Vector2>> FindRoute(Vector2 startingBuilding, 
       Vector2 destinationBuilding, IEnumerable<Tuple<Vector2, Vector2>> roads)
     {
-      var startingRoad = roads.Where(x => x.Item1.Equals(startingBuilding)).First();
-      List<Tuple<Vector2, Vector2>> fakeBestPath = new List<Tuple<Vector2, Vector2>>() { startingRoad };
-      var prevRoad = startingRoad;
-      for (int i = 0; i < 30; i++)
-      {
-        prevRoad = (roads.Where(x => x.Item1.Equals(prevRoad.Item2)).OrderBy(x => Vector2.Distance(x.Item2, destinationBuilding)).First());
-        fakeBestPath.Add(prevRoad);
-      }
-      return fakeBestPath;
+		var dijkstra = new Dijkstra(startingBuilding, destinationBuilding, roads.ToList());
+		return dijkstra.FindFastestPath();
     }
 
     private static IEnumerable<IEnumerable<Tuple<Vector2, Vector2>>> FindRoutesToAll(Vector2 startingBuilding, 
