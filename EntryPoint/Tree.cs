@@ -9,9 +9,11 @@ namespace EntryPoint
 		public Node root;
 		public Tree(Vector2 pos)
 		{
+			// Create the root of the tree
 			root = new Node { position = pos };
 		}
 
+		// Method that can be called from outside the calls, triggers the private method in the class
 		public void insert(Vector2 position)
 		{
 			root.insert(position, 0);
@@ -23,7 +25,7 @@ namespace EntryPoint
 			public Node leftSide {get; set;}
 			public Node rightSide {get; set;}
 
-			// Determine of a item is on the left or right side -> left = true | right = false
+			// Determine of an item is on the left or right side based on the level and the positions -> left = true | right = false
 			public bool determineSide(Vector2 nodePosition, int level)
 			{
 				if (level % 2 == 0)
@@ -38,46 +40,49 @@ namespace EntryPoint
 						return false;
 			}
 
-			// Add the new node to the correct side
+			// Add the new node to the tree, recursivly call the insert untill there is no children more, then create a new node
 			public Node insert(Vector2 pos, int level)
 			{
+				// X
 				if (determineSide(position, level))
 					if (leftSide == null)
 						leftSide = new Node { position = pos };
 					else
 						leftSide = leftSide.insert(pos, level + 1);
+				// Y
 				else
 					if (rightSide == null)
-					rightSide = new Node { position = pos };
-				else
-					rightSide = rightSide.insert(pos, level + 1);
+						rightSide = new Node { position = pos };
+					else
+						rightSide = rightSide.insert(pos, level + 1);
 
 				return this;
 			}
 
 			// Get all the specialBuildings within the square around a house
-			public List<Vector2> createPointsInSquareList(Vector2 minPosition, Vector2 maxPosition, Node side, List<Vector2> specialBuildingsList = null, int level = 0)
+			public List<Vector2> createPointsInSquareList(Vector2 minPosition, Vector2 maxPosition, Node node, List<Vector2> specialBuildingsList = null, int level = 0)
 			{
+				// Create the specialBuildingsList, happens on the first call
 				if (specialBuildingsList == null)
 					specialBuildingsList = new List<Vector2>();
 				
 				// If specialbuildings position is within the square, add it to the list
-				if (minPosition.X < side.position.X &&
-				   	minPosition.Y < side.position.Y &&
-				   	maxPosition.X > side.position.X &&
-				    maxPosition.Y > side.position.Y)
+				if (minPosition.X < node.position.X &&
+				   	minPosition.Y < node.position.Y &&
+				   	maxPosition.X > node.position.X &&
+				    maxPosition.Y > node.position.Y)
 				{
-					specialBuildingsList.Add(side.position);
+					specialBuildingsList.Add(node.position);
 				}
 
 				// Search the tree, based on the value of the specialbuilding deside to go left or right
-				if (determineSide(position, level) && side.leftSide != null)
+				if (determineSide(position, level) && node.leftSide != null)
 				{
-					createPointsInSquareList(minPosition, maxPosition, side.leftSide, specialBuildingsList, level+1);
+					createPointsInSquareList(minPosition, maxPosition, node.leftSide, specialBuildingsList, level+1);
 				}
-				if (!determineSide(position, level) && side.rightSide != null)
+				if (!determineSide(position, level) && node.rightSide != null)
 				{
-					createPointsInSquareList(minPosition, maxPosition, side.rightSide, specialBuildingsList, level+1);
+					createPointsInSquareList(minPosition, maxPosition, node.rightSide, specialBuildingsList, level+1);
 				}
 
 				return specialBuildingsList;
@@ -86,6 +91,7 @@ namespace EntryPoint
 
 		public IEnumerable<Vector2> getAllSpecialpointsInRangeOfHouse(Vector2 housePosition, float range)
 		{
+			// Calculate the vectors of the square around the house based on the house its position and the range
 			Vector2 minPosition = housePosition - new Vector2(range, range);
 			Vector2 maxPosition = housePosition + new Vector2(range, range);
 
@@ -94,7 +100,7 @@ namespace EntryPoint
 			return pointsInCircel(specialBuildingsInSquare, housePosition, range);
 		}
 
-		// Filter out the specialBuildings that are in the circel but not in the square around a house
+		// Filter out the specialBuildings that are in the square but not in the circel around a house
 		public IEnumerable<Vector2> pointsInCircel(IEnumerable<Vector2> specialBuildingsList, Vector2 housePosition, float range)
 		{
 			List<Vector2> specialBuildingsInCircelList = new List<Vector2>();

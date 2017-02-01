@@ -38,67 +38,13 @@ namespace EntryPoint
 
     private static IEnumerable<Vector2> SortSpecialBuildingsByDistance(Vector2 house, IEnumerable<Vector2> specialBuildings)
     {
-		double[] specialBuildingsList = new double[specialBuildings.Count()];
-		int i = 0;
-		foreach (Vector2 specialBuilding in specialBuildings)
-		{
-			specialBuildingsList[i] = Math.Sqrt(Math.Pow((house.X - specialBuilding.X), 2) + Math.Pow((house.Y - specialBuilding.Y), 2));
-			i++;
-		}
-
-		mergeSort(specialBuildingsList, 0, specialBuildings.Count() - 1);
-
-		return specialBuildings.OrderBy(v => Vector2.Distance(v, house));
+		// Set variable needed to call the Sort method
+		int specialBuildingsLength = specialBuildings.Count() - 1;
+		Vector2[] SpecialBuildings = specialBuildings.ToArray();
+		// Sort the specialBuildings based on the distance from the house
+		MergeSort.Sort(0, specialBuildingsLength, house, SpecialBuildings);
+		return SpecialBuildings;
     }
-
-	private static void mergeSort(double[] numbers, int start, int end)
-	{
-		if (start < end)
-		{
-			int middle = (start + end) / 2;
-			mergeSort(numbers, start, middle);
-			mergeSort(numbers, (middle + 1), end);
-
-			merge(numbers, start, (middle + 1), end);
-		}
-	}
-
-
-    private static void merge(double[] numbers, int start, int middle, int end)
-	{
-		double[] tempList = new double[numbers.Length];
-		int leftEnd = (middle - 1);
-		int position = start;
-		int elements = (end - start + 1);
-
-		while ((start <= leftEnd) && (middle <= end))
-		{
-			if (numbers[start] <= numbers[middle])
-			{
-				tempList[position++] = numbers[start++];
-			} else {
-				tempList[position++] = numbers[middle++];
-			}
-		}
-
-		while (start <= leftEnd)
-		{
-			tempList[position++] = numbers[start++];
-		}
-
-		while (middle <= end)
-		{
-			tempList[position++] = numbers[middle++];
-		}
-
-		for (int i = 0; i < elements; i++)
-		{
-			numbers[end] = tempList[end];
-			end--;
-		}
-		
-	}
-
 
     private static IEnumerable<IEnumerable<Vector2>> FindSpecialBuildingsWithinDistanceFromHouse(
       IEnumerable<Vector2> specialBuildings, 
@@ -119,12 +65,10 @@ namespace EntryPoint
     }
 	
 
-
-
-
 		private static IEnumerable<Tuple<Vector2, Vector2>> FindRoute(Vector2 startingBuilding, 
       Vector2 destinationBuilding, IEnumerable<Tuple<Vector2, Vector2>> roads)
     {
+		// Find the shortest path from the starting building to the destination building using roads only
 		var dijkstra = new Dijkstra(startingBuilding, destinationBuilding, roads.ToList());
 		return dijkstra.FindFastestPath();
     }

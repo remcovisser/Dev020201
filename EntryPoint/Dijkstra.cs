@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
 using Microsoft.Xna.Framework;
 
 namespace EntryPoint
@@ -23,6 +20,7 @@ namespace EntryPoint
 			CreateAdjacancyMatrix();
 		}
 
+		// Create an adjancancy matrix, for each roads it sets its adjacent rows to 1, all other roads are 0
 		private void CreateAdjacancyMatrix()
 		{
 			for (var i = 0; i < vertexes.Count; i++)
@@ -35,6 +33,7 @@ namespace EntryPoint
 					tempArray[x] = 0;
 					if (i != x)
 					{
+						// If either the beginning or the end of the road and the current vertex adjace -> set to 1 else 0
 						if(vertexes[i].Item1 == road.Item1 || vertexes[i].Item2 == road.Item2)
 							tempArray[x] = 1;
 						else
@@ -49,25 +48,24 @@ namespace EntryPoint
 
 		public List<Tuple<Vector2, Vector2>> FindFastestPath()
 		{
-			var startingIndex = -1;
-			var destinationIndex = -1;
+			// Creathe the 2 indexing values, set a default value of -1
+			int startingIndex = -1;
+			int destinationIndex = -1;
 
-			var index = 0;
-			foreach (var road in vertexes)
+			// Find the starting and destination index in the vertexes
+			for (int i = 0; i < vertexes.Count; i++)
 			{
-				if (start == road.Item1)
-					startingIndex = index;
+				if (start == vertexes[i].Item1)
+					startingIndex = i;
 
-				if (end == road.Item2)
-					destinationIndex = index;
-
-				index++;
+				if (end == vertexes[i].Item2)
+					destinationIndex = i;
 			}
 
-			var prev = DijkstraAlgorithm(startingIndex);
-
-			var result = new List<Tuple<Vector2, Vector2>>();
-			foreach (int i in prev[destinationIndex])
+			// Find the fastest route, transform the result of the algoritm into a list of vectors
+			List<int> prev = DijkstraAlgorithm(startingIndex, destinationIndex);
+			List<Tuple<Vector2, Vector2>> result = new List<Tuple<Vector2, Vector2>>();
+			foreach (int i in prev)
 			{
 				result.Add(vertexes[i]);
 			}
@@ -76,13 +74,14 @@ namespace EntryPoint
 		}
 
 
-		private List<int>[] DijkstraAlgorithm(int startingIndex)
+		private List<int> DijkstraAlgorithm(int startingIndex, int destinationIndex)
 		{
 			int graphSize = graph.Length;
 			int[] dist = new int[graphSize];
 			List<int>[] prev = new List<int>[graphSize];
 			var visited = new bool[graphSize];
 
+			// Set default values
 			for (int i = 0; i < graphSize; i++)
 			{
 				dist[i] = int.MaxValue;
@@ -96,6 +95,8 @@ namespace EntryPoint
 			{
 				int smallest = int.MaxValue;
 				int u = -1;
+
+				// Find the closest node
 				for (int i = 0; i < graphSize; i++)
 				{
 					if (visited[i] == false && dist[i] <= smallest)
@@ -106,6 +107,7 @@ namespace EntryPoint
 				}
 				visited[u] = true;
 
+				// Find the shortest path
 				for (int i = 0; i < graphSize; i++)
 				{
 					if (!visited[i] && graph[u][i] != 0 && dist[u] != int.MaxValue && dist[u] + graph[u][i] < dist[i])
@@ -116,7 +118,14 @@ namespace EntryPoint
 					}
 				}
 			}
-			return prev;
+
+			// TODO: temp fix, find the closest path to the destination of no path is found for some reason
+			for (int i = destinationIndex; i < (graphSize-1); i++) 
+			{
+				if (prev[destinationIndex].Count == 0)
+					destinationIndex++;
+			}
+			return prev[destinationIndex];
 		}
 	}
 }

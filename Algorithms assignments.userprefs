@@ -1,8 +1,10 @@
 ﻿<Properties StartupConfiguration="{8FB4DEF4-B952-495D-A589-27CDA2A952D6}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="EntryPoint/Dijkstra.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="EntryPoint/Program.cs">
     <Files>
-      <File FileName="EntryPoint/Program.cs" Line="130" Column="6" />
-      <File FileName="EntryPoint/Dijkstra.cs" Line="70" Column="26" />
+      <File FileName="EntryPoint/Program.cs" Line="42" Column="13" />
+      <File FileName="EntryPoint/MergeSort.cs" Line="9" Column="28" />
+      <File FileName="EntryPoint/Tree.cs" Line="2" Column="1" />
+      <File FileName="EntryPoint/Dijkstra.cs" Line="2" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
