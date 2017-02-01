@@ -31,7 +31,7 @@ namespace EntryPoint
 			{
 				leftSide[i] = specialBuildings[start + i];
 			}
-			//  +1 Because the left side stops at the middle, the right starts after the middle
+			// +1 Because the left side stops at the middle, the right starts after the middle
 			for (int i = 0; i < lengthRightSide; i++)
 			{
 				rightSide[i] = specialBuildings[middle + i + 1];

@@ -48,7 +48,7 @@ namespace EntryPoint
 
 		public List<Tuple<Vector2, Vector2>> FindFastestPath()
 		{
-			// Creathe the 2 indexing values, set a default value of -1
+			// Create the 2 indexing values, set a default value of -1
 			int startingIndex = -1;
 			int destinationIndex = -1;
 

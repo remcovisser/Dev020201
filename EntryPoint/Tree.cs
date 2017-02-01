@@ -43,13 +43,13 @@ namespace EntryPoint
 			// Add the new node to the tree, recursivly call the insert untill there is no children more, then create a new node
 			public Node insert(Vector2 pos, int level)
 			{
-				// X
+				// Left
 				if (determineSide(position, level))
 					if (leftSide == null)
 						leftSide = new Node { position = pos };
 					else
 						leftSide = leftSide.insert(pos, level + 1);
-				// Y
+				// Right
 				else
 					if (rightSide == null)
 						rightSide = new Node { position = pos };
@@ -78,10 +78,12 @@ namespace EntryPoint
 				// Search the tree, based on the value of the specialbuilding deside to go left or right
 				if (determineSide(position, level) && node.leftSide != null)
 				{
+					// Search left
 					createPointsInSquareList(minPosition, maxPosition, node.leftSide, specialBuildingsList, level+1);
 				}
 				if (!determineSide(position, level) && node.rightSide != null)
 				{
+					// Search right
 					createPointsInSquareList(minPosition, maxPosition, node.rightSide, specialBuildingsList, level+1);
 				}
 
